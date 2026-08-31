@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <!-- Outer Shield -->
+    <path
+        android:fillColor="#00F0FF"
+        android:pathData="M54,26L32,36v20c0,15.5 9.4,30 22,35c12.6,-5 22,-19.5 22,-35V36L54,26z" />
+    <!-- Inner Dark Shield Accent -->
+    <path
+        android:fillColor="#0B132B"
+        android:pathData="M54,30.5L35.5,39v17c0,13.2 8,25.5 18.5,29.8c10.5,-4.3 18.5,-16.6 18.5,-29.8V39L54,30.5z" />
+    <!-- Center Bolt / Key / Speed Accent -->
+    <path
+        android:fillColor="#00F0FF"
+        android:pathData="M56,41L45,55h7l-2,14l13,-15h-7l2,-13z" />
+</vector>
