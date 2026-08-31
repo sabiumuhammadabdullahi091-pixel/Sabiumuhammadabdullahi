@@ -1,6 +1,6 @@
 {
-  "name": "50GB Daily VPN",
-  "description": "High-speed secure VPN app with daily 50GB bandwidth allocation, email and guest sign-in, global server switcher, and direct OPay creator monetization support.",
+  "name": "Digital Creator Rewards",
+  "description": "Digital creator rewarding app with instant stars and stats from Google, Telegram, and Facebook for 1000+ followers, data-saving smart web browser, 500 Naira rewards per ad, and direct OPay withdrawals for Sabiu Abdullahi Muhammad.",
   "requestFramePermissions": [],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }

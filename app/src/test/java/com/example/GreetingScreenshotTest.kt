@@ -2,7 +2,9 @@ package com.example
 
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onRoot
-import com.example.ui.screens.AuthScreen
+import com.example.data.CreatorStats
+import com.example.data.CreatorWallet
+import com.example.ui.screens.StatsStarsHubScreen
 import com.example.ui.theme.MyApplicationTheme
 import com.github.takahirom.roborazzi.RobolectricDeviceQualifiers
 import com.github.takahirom.roborazzi.captureRoboImage
@@ -24,9 +26,14 @@ class GreetingScreenshotTest {
   fun greeting_screenshot() {
     composeTestRule.setContent {
       MyApplicationTheme {
-        AuthScreen(
-          onSignInEmail = { _, _ -> },
-          onSignInGuest = { }
+        StatsStarsHubScreen(
+          stats = CreatorStats(),
+          wallet = CreatorWallet(),
+          onGenerateStars = { },
+          onGenerateAllStarsSurge = { },
+          onUpdateFollowers = { },
+          onNavigateToAdReward = { },
+          onNavigateToOpay = { }
         )
       }
     }

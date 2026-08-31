@@ -22,6 +22,6 @@ dependencyResolutionManagement {
   }
 }
 
-rootProject.name = "50GB Daily VPN"
+rootProject.name = "Digital Creator Rewards"
 
 include(":app")
