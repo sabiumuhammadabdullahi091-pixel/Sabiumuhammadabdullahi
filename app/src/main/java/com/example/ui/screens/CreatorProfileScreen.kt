@@ -57,6 +57,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.material.icons.filled.CloudDone
+import androidx.compose.material.icons.filled.FolderShared
+import androidx.compose.material.icons.filled.Storage
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
@@ -84,6 +87,7 @@ fun CreatorProfileScreen(
     dataSaver: DataSaverMetrics,
     creatorManager: CreatorManager,
     onToggleUltraSaver: (Boolean) -> Unit,
+    onNavigateToFileVault: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
     val context = LocalContext.current
@@ -609,6 +613,92 @@ fun CreatorProfileScreen(
                             uncheckedThumbColor = TextMutedDark,
                             uncheckedTrackColor = CyberSurfaceVariant
                         )
+                    )
+                }
+            }
+        }
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        // 5. 5TB Cloud Vault & Backup Center
+        Card(
+            modifier = Modifier
+                .fillMaxWidth()
+                .testTag("profile_5tb_vault_card"),
+            shape = RoundedCornerShape(16.dp),
+            colors = CardDefaults.cardColors(containerColor = CyberSurfaceDark),
+            border = androidx.compose.foundation.BorderStroke(1.dp, CyberCyan.copy(alpha = 0.5f))
+        ) {
+            Column(modifier = Modifier.padding(16.dp)) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Box(
+                            modifier = Modifier
+                                .size(36.dp)
+                                .clip(CircleShape)
+                                .background(CyberCyan.copy(alpha = 0.2f)),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.CloudDone,
+                                contentDescription = null,
+                                tint = CyberCyan,
+                                modifier = Modifier.size(20.dp)
+                            )
+                        }
+                        Spacer(modifier = Modifier.width(10.dp))
+                        Column {
+                            Text(
+                                text = "5TB BACKUP & FILE VAULT",
+                                fontSize = 11.sp,
+                                fontWeight = FontWeight.Bold,
+                                color = CyberCyan,
+                                letterSpacing = 1.sp
+                            )
+                            Text(
+                                text = "5.0 TB Storage • Instant File Recovery",
+                                fontSize = 11.sp,
+                                color = TextSecondaryDark
+                            )
+                        }
+                    }
+
+                    Box(
+                        modifier = Modifier
+                            .clip(RoundedCornerShape(6.dp))
+                            .background(CyberGreen.copy(alpha = 0.2f))
+                            .padding(horizontal = 6.dp, vertical = 2.dp)
+                    ) {
+                        Text(
+                            text = "5TB ACTIVE",
+                            fontSize = 9.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = CyberGreen
+                        )
+                    }
+                }
+
+                Spacer(modifier = Modifier.height(12.dp))
+
+                Button(
+                    onClick = onNavigateToFileVault,
+                    shape = RoundedCornerShape(10.dp),
+                    colors = ButtonDefaults.buttonColors(containerColor = CyberCyan, contentColor = Color(0xFF00272B)),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(40.dp)
+                        .testTag("open_file_vault_from_profile_button")
+                ) {
+                    Icon(Icons.Default.Storage, contentDescription = null, modifier = Modifier.size(16.dp))
+                    Spacer(modifier = Modifier.width(6.dp))
+                    Text(
+                        text = "MANAGE & RESTORE 5TB BACKUP FILES",
+                        fontSize = 11.sp,
+                        fontWeight = FontWeight.Bold
                     )
                 }
             }

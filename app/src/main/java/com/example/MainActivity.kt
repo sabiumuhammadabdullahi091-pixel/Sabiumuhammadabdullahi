@@ -12,12 +12,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
-import androidx.compose.material.icons.filled.AutoAwesome
 import androidx.compose.material.icons.filled.DataSaverOn
 import androidx.compose.material.icons.filled.MonetizationOn
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.Star
-import androidx.compose.material.icons.filled.TrendingUp
+import androidx.compose.material.icons.filled.Storage
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
@@ -41,9 +40,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.ads.GoogleAdsManager
 import com.example.ads.RewardTracker
+import com.example.data.BackupVaultManager
 import com.example.data.CreatorManager
 import com.example.ui.screens.CreatorProfileScreen
 import com.example.ui.screens.DataSaverBrowserScreen
+import com.example.ui.screens.FileManagementScreen
 import com.example.ui.screens.OpayPayoutScreen
 import com.example.ui.screens.RewardTrackerScreen
 import com.example.ui.screens.StatsStarsHubScreen
@@ -67,13 +68,15 @@ class MainActivity : ComponentActivity() {
         val creatorManager = CreatorManager.getInstance(this)
         val adsManager = GoogleAdsManager.getInstance(this)
         val rewardTracker = RewardTracker.getInstance(this)
+        val vaultManager = BackupVaultManager.getInstance(this)
 
         setContent {
             MyApplicationTheme {
                 DigitalCreatorAppRoot(
                     creatorManager = creatorManager,
                     adsManager = adsManager,
-                    rewardTracker = rewardTracker
+                    rewardTracker = rewardTracker,
+                    vaultManager = vaultManager
                 )
             }
         }
@@ -84,7 +87,8 @@ class MainActivity : ComponentActivity() {
 fun DigitalCreatorAppRoot(
     creatorManager: CreatorManager,
     adsManager: GoogleAdsManager,
-    rewardTracker: RewardTracker
+    rewardTracker: RewardTracker,
+    vaultManager: BackupVaultManager
 ) {
     val scope = rememberCoroutineScope()
     val snackbarHostState = remember { SnackbarHostState() }
@@ -93,7 +97,7 @@ fun DigitalCreatorAppRoot(
     val wallet by creatorManager.wallet.collectAsState()
     val dataSaver by creatorManager.dataSaver.collectAsState()
 
-    var selectedTab by remember { mutableIntStateOf(0) } // 0: Stars & Stats, 1: ₦500 Reward Tracker, 2: Data Saver, 3: OPay Hub, 4: Profile
+    var selectedTab by remember { mutableIntStateOf(0) } // 0: Stars & Stats, 1: ₦500 Ads, 2: 5TB Vault, 3: Data Saver, 4: OPay Hub, 5: Profile
 
     Scaffold(
         snackbarHost = { SnackbarHost(snackbarHostState) },
@@ -114,13 +118,13 @@ fun DigitalCreatorAppRoot(
                         Icon(
                             imageVector = Icons.Default.Star,
                             contentDescription = "Stars & Stats",
-                            modifier = Modifier.size(22.dp)
+                            modifier = Modifier.size(20.dp)
                         )
                     },
                     label = {
                         Text(
-                            "Stars & Stats",
-                            fontSize = 10.sp,
+                            "Stars",
+                            fontSize = 9.sp,
                             fontWeight = if (selectedTab == 0) FontWeight.Bold else FontWeight.Normal
                         )
                     },
@@ -141,13 +145,13 @@ fun DigitalCreatorAppRoot(
                         Icon(
                             imageVector = Icons.Default.PlayArrow,
                             contentDescription = "Reward Tracker",
-                            modifier = Modifier.size(22.dp)
+                            modifier = Modifier.size(20.dp)
                         )
                     },
                     label = {
                         Text(
-                            "Reward Tracker",
-                            fontSize = 10.sp,
+                            "₦500 Ads",
+                            fontSize = 9.sp,
                             fontWeight = if (selectedTab == 1) FontWeight.Bold else FontWeight.Normal
                         )
                     },
@@ -160,21 +164,21 @@ fun DigitalCreatorAppRoot(
                     )
                 )
 
-                // 3. Data Saver Browser
+                // 3. 5TB Vault (Backup & File Management)
                 NavigationBarItem(
                     selected = selectedTab == 2,
                     onClick = { selectedTab = 2 },
                     icon = {
                         Icon(
-                            imageVector = Icons.Default.DataSaverOn,
-                            contentDescription = "Data Saver",
-                            modifier = Modifier.size(22.dp)
+                            imageVector = Icons.Default.Storage,
+                            contentDescription = "5TB Vault",
+                            modifier = Modifier.size(20.dp)
                         )
                     },
                     label = {
                         Text(
-                            "Data Saver",
-                            fontSize = 10.sp,
+                            "5TB Vault",
+                            fontSize = 9.sp,
                             fontWeight = if (selectedTab == 2) FontWeight.Bold else FontWeight.Normal
                         )
                     },
@@ -187,22 +191,49 @@ fun DigitalCreatorAppRoot(
                     )
                 )
 
-                // 4. OPay Payout Hub
+                // 4. Data Saver Browser
                 NavigationBarItem(
                     selected = selectedTab == 3,
                     onClick = { selectedTab = 3 },
                     icon = {
                         Icon(
+                            imageVector = Icons.Default.DataSaverOn,
+                            contentDescription = "Data Saver",
+                            modifier = Modifier.size(20.dp)
+                        )
+                    },
+                    label = {
+                        Text(
+                            "Data Saver",
+                            fontSize = 9.sp,
+                            fontWeight = if (selectedTab == 3) FontWeight.Bold else FontWeight.Normal
+                        )
+                    },
+                    colors = NavigationBarItemDefaults.colors(
+                        selectedIconColor = CyberCyan,
+                        selectedTextColor = CyberCyan,
+                        unselectedIconColor = TextMutedDark,
+                        unselectedTextColor = TextMutedDark,
+                        indicatorColor = CyberCyan.copy(alpha = 0.15f)
+                    )
+                )
+
+                // 5. OPay Payout Hub
+                NavigationBarItem(
+                    selected = selectedTab == 4,
+                    onClick = { selectedTab = 4 },
+                    icon = {
+                        Icon(
                             imageVector = Icons.Default.MonetizationOn,
                             contentDescription = "OPay Payout",
-                            modifier = Modifier.size(22.dp)
+                            modifier = Modifier.size(20.dp)
                         )
                     },
                     label = {
                         Text(
                             "OPay Hub",
-                            fontSize = 10.sp,
-                            fontWeight = if (selectedTab == 3) FontWeight.Bold else FontWeight.Normal
+                            fontSize = 9.sp,
+                            fontWeight = if (selectedTab == 4) FontWeight.Bold else FontWeight.Normal
                         )
                     },
                     colors = NavigationBarItemDefaults.colors(
@@ -214,22 +245,22 @@ fun DigitalCreatorAppRoot(
                     )
                 )
 
-                // 5. Creator Profile
+                // 6. Creator Profile
                 NavigationBarItem(
-                    selected = selectedTab == 4,
-                    onClick = { selectedTab = 4 },
+                    selected = selectedTab == 5,
+                    onClick = { selectedTab = 5 },
                     icon = {
                         Icon(
                             imageVector = Icons.Default.AccountCircle,
                             contentDescription = "Profile",
-                            modifier = Modifier.size(22.dp)
+                            modifier = Modifier.size(20.dp)
                         )
                     },
                     label = {
                         Text(
                             "Profile",
-                            fontSize = 10.sp,
-                            fontWeight = if (selectedTab == 4) FontWeight.Bold else FontWeight.Normal
+                            fontSize = 9.sp,
+                            fontWeight = if (selectedTab == 5) FontWeight.Bold else FontWeight.Normal
                         )
                     },
                     colors = NavigationBarItemDefaults.colors(
@@ -269,14 +300,17 @@ fun DigitalCreatorAppRoot(
                         creatorManager.updateFollowers(newCount)
                     },
                     onNavigateToAdReward = { selectedTab = 1 },
-                    onNavigateToOpay = { selectedTab = 3 }
+                    onNavigateToOpay = { selectedTab = 4 }
                 )
                 1 -> RewardTrackerScreen(
                     rewardTracker = rewardTracker,
                     adsManager = adsManager,
-                    onNavigateToOpayHub = { selectedTab = 3 }
+                    onNavigateToOpayHub = { selectedTab = 4 }
                 )
-                2 -> DataSaverBrowserScreen(
+                2 -> FileManagementScreen(
+                    vaultManager = vaultManager
+                )
+                3 -> DataSaverBrowserScreen(
                     dataSaverMetrics = dataSaver,
                     onRecordBrowsing = { saved, generated ->
                         creatorManager.recordBrowsingActivity(saved, generated)
@@ -288,7 +322,7 @@ fun DigitalCreatorAppRoot(
                         }
                     }
                 )
-                3 -> OpayPayoutScreen(
+                4 -> OpayPayoutScreen(
                     wallet = wallet,
                     onWithdrawAmount = { amount ->
                         val tx = creatorManager.withdrawToOpay(amount)
@@ -300,14 +334,15 @@ fun DigitalCreatorAppRoot(
                         tx
                     }
                 )
-                4 -> CreatorProfileScreen(
+                5 -> CreatorProfileScreen(
                     stats = stats,
                     wallet = wallet,
                     dataSaver = dataSaver,
                     creatorManager = creatorManager,
                     onToggleUltraSaver = { enabled ->
                         creatorManager.toggleUltraDataSaver(enabled)
-                    }
+                    },
+                    onNavigateToFileVault = { selectedTab = 2 }
                 )
             }
         }

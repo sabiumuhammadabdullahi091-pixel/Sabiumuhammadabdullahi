@@ -78,4 +78,35 @@ class ExampleRobolectricTest {
     assertEquals("Sabiu Abdullahi Muhammad", manager.wallet.value.opayAccountName)
     assertEquals("9169878194", manager.wallet.value.opayAccountNumber)
   }
+
+  @Test
+  fun `test 5TB BackupVaultManager files list and restore functionality`() {
+    val context = ApplicationProvider.getApplicationContext<Context>()
+    val vault = com.example.data.BackupVaultManager.getInstance(context)
+
+    val initialFiles = vault.files.value
+    org.junit.Assert.assertTrue("Initial backup files list should not be empty", initialFiles.isNotEmpty())
+
+    val firstFile = initialFiles.first()
+    vault.restoreFile(firstFile.id)
+
+    val updatedFiles = vault.files.value
+    val restored = updatedFiles.find { it.id == firstFile.id }
+    org.junit.Assert.assertNotNull(restored)
+    org.junit.Assert.assertTrue(restored!!.isRestored)
+    org.junit.Assert.assertTrue(restored.status.contains("Restored"))
+
+    // Test creating a new snapshot in 5TB vault
+    val newSnapshot = vault.createBackupSnapshot(
+      name = "custom_creator_test_asset.zip",
+      category = com.example.data.BackupCategory.ARCHIVE,
+      sizeBytes = 15_000_000_000L,
+      formattedSize = "15.0 GB",
+      description = "Test created backup archive"
+    )
+
+    org.junit.Assert.assertEquals("custom_creator_test_asset.zip", newSnapshot.fileName)
+    org.junit.Assert.assertTrue(vault.files.value.any { it.id == newSnapshot.id })
+    org.junit.Assert.assertEquals("5.00 TB", vault.vaultMetrics.value.totalQuotaFormatted)
+  }
 }
